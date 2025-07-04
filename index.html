@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tally System (ATEM1000-12Pro) 종합 설명서</title>
+    <style>
+        /* --- 기본 스타일 및 글꼴 설정 --- */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        
+        html {
+            scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            color: #333;
+            overflow: hidden; 
+            height: 100vh;
+        }
+
+        /* --- 고정 헤더 --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(44, 62, 80, 0.85);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 15px 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s;
+        }
+
+        header h1 {
+            margin: 0;
+            padding-left: 40px;
+            font-size: 2.0em; /* 10% 증가 */
+        }
+
+        /* --- 네비게이션 메뉴 --- */
+        nav {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 16px;
+            font-size: 1.2em; /* 10% 증가 */
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active-nav {
+            color: #29bca4;
+        }
+        
+        .header-placeholder {
+            width: 280px;
+        }
+        
+        /* --- 풀페이지 섹션 설정 --- */
+        main {
+            height: 100vh;
+            width: 100%;
+            overflow-y: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        main::-webkit-scrollbar {
+             display: none;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: 130px 40px 40px 40px;
+        }
+
+        /* --- 섹션별 스타일 --- */
+        #intro { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; }
+        #components, #receiver { background-color: #f4f7f6; }
+        #interface, #setup, #battery { background-color: #e9ecef; }
+        #precautions { background-color: #2c3e50; color: white; }
+
+        .content-wrapper {
+            background-color: white;
+            padding: 44px 55px; /* 10% 증가 */
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1650px; /* 10% 증가 */
+            text-align: left;
+            max-height: 85vh;
+            overflow: auto; 
+        }
+        
+        .item-layout { display: flex; align-items: center; gap: 44px; } /* 10% 증가 */
+        .image-column { flex: 1; text-align: center; }
+        .text-column { flex: 1.2; }
+        .item-image { width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: block; }
+        
+        #interface .image-column img {
+            max-width: 100%;
+            max-height: 65vh;
+            width: auto;
+        }
+        
+        #intro .content-wrapper, #precautions .content-wrapper { background: none; box-shadow: none; text-align: center; }
+        #intro .icon { font-size: 5.5em; line-height: 1; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        #intro h2 { color: white; font-size: 5.0em; font-weight: 900; border-bottom: none; text-shadow: 0 4px 15px rgba(0,0,0,0.2); margin: 20px 0; }
+        #intro p.description { color: #c7d5e0; font-size: 1.65em; max-width: 950px; margin: 0 auto; text-align: center; }
+        
+        h2 { font-size: 2.4em; color: #3498db; border-bottom: 3px solid #eaeaea; padding-bottom: 15px; margin-top: 0; margin-bottom: 20px; }
+        h3 { font-size: 1.4em; color: #2980b9; margin-top: 25px; margin-bottom: 15px; }
+        
+        ul { list-style: none; padding-left: 0; }
+        li, p { white-space: nowrap; }
+        li { margin-bottom: 11px; font-size: 1.2em; line-height: 1.7; }
+        .list-check li::before { content: '✅'; margin-right: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 1.2em; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid #ddd; white-space: nowrap; }
+        thead th { background-color: #34495e; color: white; font-weight: 500; }
+        tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        
+        .note { background-color: #fffbe6; border-left: 4px solid #f1c40f; padding: 15px 20px; border-radius: 4px; font-size: 1.2em; margin-top: 20px; }
+        .note strong { color: #c0392b; }
+        
+        .detail-text { font-size: 1.1em; color: #555; padding-left: 1.5em; }
+
+        /* --- '설치 방법' 페이지만 원래 크기로 되돌리는 스타일 --- */
+        #setup .content-wrapper { max-width: 1500px; padding: 40px 50px; }
+        #setup h2 { font-size: 2.2em; }
+        #setup h3 { font-size: 1.3em; }
+        #setup p, #setup li { font-size: 1.1em; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tally System</h1>
+        <nav>
+            <a href="#intro">소개</a>
+            <a href="#components">구성품</a>
+            <a href="#interface">본체 기능</a>
+            <a href="#receiver">수신기 기능</a>
+            <a href="#setup">설치 방법</a>
+            <a href="#battery">배터리 정보</a>
+            <a href="#precautions">주의사항</a>
+        </nav>
+        <div class="header-placeholder"></div>
+    </header>
+
+    <main>
+        <section id="intro">
+            <div class="content-wrapper">
+                <div class="icon">📡</div>
+                <h2>Tally System 종합 설명서</h2>
+                <p class="description">ATEM1000-12Pro 모델을 기준으로, 블랙매직 ATEM 스위처와 연동하여 사용하는 방법을 안내합니다.</p>
+            </div>
+        </section>
+
+        <section id="components">
+            <div class="content-wrapper">
+                <h2>✅ 구성품 세트 내용 (완제품 풀 세트)</h2>
+                <ul class="list-check">
+                    <li>탈리 인터페이스 본체 1개</li>
+                    <li>무선 탈리 수신기 12개 (채널별 번호 표시)</li>
+                    <li>USB 충전 스테이션 (8포트)</li>
+                    <li>USB Type-C 케이블 (충전용 다수)</li>
+                    <li>네트워크 케이블 (RJ45 케이블)</li>
+                    <li>USB 전원 케이블 (인터페이스 전원 연결용)</li>
+                    <li>무선 안테나 (인터페이스 및 수신기용)</li>
+                    <li>설치용 마운트 부품 및 예비용 공구 포함</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="interface">
+            <div class="content-wrapper">
+                <h2>📌 Tally Interface (본체) 상세 기능</h2>
+                <div class="item-layout">
+                    <div class="image-column"><img src="스크린샷 2025-07-04 170827.png" alt="Tally Interface" class="item-image"></div>
+                    <div class="text-column">
+                        <h3>전면부 (Front)</h3>
+                        <ul>
+                            <li><strong>① 탈리 상태 표시등:</strong> 총 24개 LED. 위쪽은 PGM(방송중-빨강), 아래쪽은 PVW(대기중-초록)를 표시합니다.</li>
+                            <li><strong>② 리셋(Rst) 홀:</strong> 길게 눌러 장비 IP를 `192.168.10.200`으로 초기화할 때 사용합니다. (일반 사용 시 누르지 않음)</li>
+                            <li><strong>③ SYS 표시등:</strong> 전원 인가 10초 후부터 깜박이며, 스위처와 정상적으로 통신 중임을 나타냅니다.</li>
+                            <li><strong>④ PWR 전원 표시등:</strong> 전원이 연결되면 항상 켜져 있습니다.</li>
+                            <li><strong>⑤ 전면 RJ45 포트:</strong> LED가 내장된 기가비트 포트. ATEM 스위처, 컴퓨터, 컨트롤 패널 등을 연결합니다.</li>
+                        </ul>
+                         <h3>후면부 (Back)</h3>
+                        <ul>
+                            <li><strong>⑥ 5V USB 전원 포트:</strong> 1A 출력 기준 전원 공급. 1개는 주 전원, 1개는 예비 전원용입니다. (vMix 사용 시 전용 케이블 사용)</li>
+                            <li><strong>⑦ DB25 포트:</strong> 24채널 유선 탤리 출력을 지원하는 단자. 외부 릴레이 장치 등과 연결 가능하며, 13번 핀은 독립 접지선입니다.</li>
+                            <li><strong>⑧ 후면 RJ45 포트:</strong> 전면 포트와 동일한 기능을 하는 추가 네트워크 포트입니다.</li>
+                            <li><strong>⑨ 무선 확장 인터페이스:</strong> 옵션 품목인 Tally Pro 무선 수신기를 위한 안테나를 연결하는 포트입니다.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="receiver">
+            <div class="content-wrapper">
+                <h2>📌 무선 수신기 (Tally RX Pro) 상세 기능</h2>
+                <div class="item-layout">
+                    <div class="image-column"><img src="스크린샷 2025-07-04 164910.png" alt="Tally Receiver" class="item-image"></div>
+                    <div class="text-column">
+                        <h3>간단 요약</h3>
+                        <table>
+                            <thead>
+                                <tr><th>항목</th><th>역할 및 용도</th><th>설정 방법 예시</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>MODE 버튼</strong></td>
+                                    <td>수신기의 동작 방식 설정 (일반/테스트/페어링)</td>
+                                    <td>버튼을 눌러 모드 변경</td>
+                                </tr>
+                                 <tr>
+                                    <td><strong>ID 로터리 스위치</strong></td>
+                                    <td>각 수신기에 고유한 채널 번호를 부여하여 송신기와 연결</td>
+                                    <td>카메라 번호와 같은 숫자로 설정</td>
+                                </tr>
+                                 <tr>
+                                    <td><strong>Tally OUT</strong></td>
+                                    <td>수신한 탤리 신호를 다른 외부 장치(LED, 조명)에 출력</td>
+                                    <td>외부 LED나 조명 시스템 연결</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="setup">
+            <div class="content-wrapper">
+                <h2>🎬 설치 및 설정 방법 (ATEM 스위처 기준)</h2>
+                <h3>기본 IP 설정</h3>
+                <p>이 탤리 시스템은 ATEM 스위처의 IP가 **`192.168.10.240`**으로 설정된 것을 기준으로 작동합니다. 따라서, ATEM Software Control 프로그램을 통해 스위처의 IP를 직접 설정해야 합니다.</p>
+                <img src="스크린샷 2025-07-04 165044.png" alt="ATEM IP 설정 예시" class="item-image" style="max-width: 800px; margin: 20px auto;">
+                <h3>간략한 사용법 요약</h3>
+                 <ul class="list-check">
+                     <li>ATEM 스위처와 인터페이스 간 IP 설정을 맞추고 네트워크로 연결합니다.</li>
+                     <li>수신기 채널(ID)을 카메라 번호와 동일하게 설정 후 전원을 켭니다.</li>
+                     <li>카메라에 장착 후 스위처에서 PGM/PVW 선택 시 탤리 상태가 실시간으로 표시됩니다.</li>
+                 </ul>
+            </div>
+        </section>
+
+        <section id="battery">
+            <div class="content-wrapper">
+                <h2>🔋 배터리 및 실사용 가능 시간</h2>
+                 <div class="note">배터리 용량은 <strong>1200mAh</strong> (리튬폴리머 3.7V)입니다.</div>
+                <h3>실사용 가능 시간 (일반 기준)</h3>
+                 <table>
+                    <thead>
+                        <tr><th>사용 환경</th><th>사용 가능 시간 (완충 기준)</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>LED 밝기 최대 + 빈번한 신호 수신</td><td>약 8~10시간</td></tr>
+                        <tr><td>일반적인 방송 환경 (평균적인 사용)</td><td>약 10~12시간</td></tr>
+                        <tr><td>LED 밝기 최소 + 신호 수신 빈도 적음</td><td>약 12시간 이상</td></tr>
+                    </tbody>
+                 </table>
+                <h3>⚠️ 실사용 팁</h3>
+                 <ul class="list-check" style="list-style-type: none;">
+                    <li>촬영 전에는 항상 완전 충전을 권장합니다.</li>
+                    <li>장시간 방송의 경우 여분의 수신기 또는 보조 배터리를 준비하면 더욱 안정적입니다.</li>
+                    <li>LED 밝기를 낮추면 배터리 사용 시간이 더 길어집니다.</li>
+                 </ul>
+            </div>
+        </section>
+        
+        <section id="precautions">
+            <div class="content-wrapper">
+                 <h2 style="color:white;">🚨 중요 주의사항</h2>
+                 <ul class="list-check" style="color:white; font-size: 1.3em; text-align:left; display:inline-block;">
+                    <li>ATEM 스위처 IP를 **`192.168.10.240`**으로 설정하거나, 전용 소프트웨어로 IP를 통일해야 정상 작동합니다.</li>
+                    <li>DB25 커넥터 사용 시, **13번 핀에 반드시 별도의 접지선을 연결**하여 장비를 보호하세요.</li>
+                    <li>수신기는 촬영 전 **배터리를 충분히 충전**하고 상태를 확인하세요.</li>
+                 </ul>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        window.addEventListener('wheel', function(e) { e.preventDefault(); }, { passive: false });
+        let currentSection = 0;
+        const sections = document.querySelectorAll('section');
+        const totalSections = sections.length;
+        let isScrolling = false;
+        const mainContainer = document.querySelector('main');
+
+        mainContainer.addEventListener('wheel', function(e) {
+            if (isScrolling) return;
+            if (e.deltaY > 0) {
+                if (currentSection < totalSections - 1) { currentSection++; scrollToSection(currentSection); }
+            } else {
+                if (currentSection > 0) { currentSection--; scrollToSection(currentSection); }
+            }
+        });
+
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                for(let i=0; i < totalSections; i++){
+                    if(sections[i].id === targetId){ currentSection = i; scrollToSection(currentSection); break; }
+                }
+            });
+        });
+
+        function scrollToSection(index) {
+            isScrolling = true;
+            const targetSection = sections[index];
+            mainContainer.scrollTo({ top: targetSection.offsetTop, behavior: 'smooth' });
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active-nav'));
+            document.querySelector(`nav a[href="#${targetSection.id}"]`).classList.add('active-nav');
+            setTimeout(() => { isScrolling = false; }, 800);
+        }
+        
+        document.querySelector('nav a[href="#intro"]').classList.add('active-nav');
+    </script>
+</body>
+</html>
